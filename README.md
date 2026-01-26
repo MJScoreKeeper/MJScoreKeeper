@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# Mahjong KS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A mobile-first Hong Kong Mahjong scoring tracker app for two players.
 
-Currently, two official plugins are available:
+**Live App:** https://garylchan.github.io/Mahjong-KS/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- Track scores for two players
+- Hong Kong Mahjong scoring criteria (1-13 番)
+- Win count tracking per player
+- Custom "Other" option for additional 番
+- Data persists in browser localStorage
+- Works offline once loaded
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Scoring Criteria
 
-## Expanding the ESLint configuration
+### Basic (1 番)
+- 自摸 (Self-Drawn)
+- 門前清 (Concealed Hand)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Common (3 番)
+- 對對和 (All Pungs)
+- 混一色 (Mixed One Suit)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### High Value (5-8 番)
+- 小三元 (Small Three Dragons) - 5 番
+- 小四喜 (Small Four Winds) - 6 番
+- 清一色 (Pure One Suit) - 7 番
+- 坎坎胡 (All Pungs Self-Drawn) - 8 番
+- 大三元 (Big Three Dragons) - 8 番
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Special (10+ 番)
+- 字一色 (All Honors) - 10 番
+- 大四喜 (Big Four Winds) - 13 番
+- 天糊 (Heavenly Hand) - 13 番
+- 地糊 (Earthly Hand) - 13 番
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+- React 19 + TypeScript
+- Vite
+- Tailwind CSS
+- Zustand (state management)
+- React Router (HashRouter for GitHub Pages)
+
+## Development
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+## Deployment
+
+Automatically deployed to GitHub Pages via GitHub Actions on push to main branch.
