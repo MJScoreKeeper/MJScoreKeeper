@@ -53,18 +53,18 @@ export default function MainPage() {
             onClick={handleResetGame}
             className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded transition"
           >
-            Reset
+            New Match
           </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
         {/* Game Number */}
         <GameHeader gameNumber={session.current_game_number} />
 
         {/* Players */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <PlayerCard
             name={session.player1_name}
             totalPoints={session.player1_total_points}
@@ -80,25 +80,16 @@ export default function MainPage() {
         </div>
 
         {/* Record Win Button */}
-        <div className="pt-4">
-          <RecordWinButton onClick={handleRecordWin} />
-        </div>
+        <RecordWinButton onClick={handleRecordWin} />
 
         {/* Start Over Button */}
-        <div className="pt-2">
-          <button
-            onClick={handleStartOver}
-            className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200"
-            style={{ minHeight: '48px' }}
-          >
-            Start Over (Reset Scores)
-          </button>
-        </div>
-
-        {/* Info */}
-        <div className="text-center text-sm text-gray-500 pt-2">
-          <p>Started: {new Date(session.created_at).toLocaleDateString()}</p>
-        </div>
+        <button
+          onClick={handleStartOver}
+          className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200"
+          style={{ minHeight: '48px' }}
+        >
+          Start Over (Reset Scores)
+        </button>
       </div>
     </div>
   );
