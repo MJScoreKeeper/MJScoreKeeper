@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useScoringStore } from '../stores/scoringStore';
+import { useThemeStore } from '../stores/themeStore';
 import { SCORING_CATEGORIES } from '../constants/scoringCriteria';
 import ScoringChecklist from '../components/scoring/ScoringChecklist';
 
@@ -14,6 +15,7 @@ export default function ScoringPage() {
   const getTotalPoints = useScoringStore((state) => state.getTotalPoints);
   const setOtherPoints = useScoringStore((state) => state.setOtherPoints);
   const otherPoints = useScoringStore((state) => state.otherPoints);
+  const theme = useThemeStore((state) => state.theme);
   const navigate = useNavigate();
 
   const [otherInputValue, setOtherInputValue] = useState(otherPoints.toString());
@@ -59,7 +61,10 @@ export default function ScoringPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
       {/* Header */}
-      <div className="bg-[#1B5E20] text-white py-4 px-4 shadow-lg sticky top-0 z-10">
+      <div
+        className="text-white py-4 px-4 shadow-lg sticky top-0 z-10"
+        style={{ backgroundColor: theme.primary }}
+      >
         <div className="max-w-2xl mx-auto">
           <button
             onClick={handleBack}
@@ -81,12 +86,15 @@ export default function ScoringPage() {
               onClick={() => setWinner(1)}
               className={`py-4 px-6 rounded-lg font-semibold transition-all ${
                 winnerId === 1
-                  ? 'bg-[#1B5E20] shadow-lg scale-105'
+                  ? 'shadow-lg scale-105'
                   : 'bg-gray-100 hover:bg-gray-200'
               }`}
-              style={{ minHeight: '60px' }}
+              style={{
+                minHeight: '60px',
+                backgroundColor: winnerId === 1 ? theme.primary : undefined,
+              }}
             >
-              <div className={`text-xs mb-1 ${winnerId === 1 ? 'text-green-100' : 'text-gray-500'}`}>
+              <div className={`text-xs mb-1 ${winnerId === 1 ? 'text-white/70' : 'text-gray-500'}`}>
                 Player 1
               </div>
               <div className={`text-lg ${winnerId === 1 ? 'text-white' : 'text-gray-700'}`}>
@@ -97,12 +105,15 @@ export default function ScoringPage() {
               onClick={() => setWinner(2)}
               className={`py-4 px-6 rounded-lg font-semibold transition-all ${
                 winnerId === 2
-                  ? 'bg-[#1B5E20] shadow-lg scale-105'
+                  ? 'shadow-lg scale-105'
                   : 'bg-gray-100 hover:bg-gray-200'
               }`}
-              style={{ minHeight: '60px' }}
+              style={{
+                minHeight: '60px',
+                backgroundColor: winnerId === 2 ? theme.primary : undefined,
+              }}
             >
-              <div className={`text-xs mb-1 ${winnerId === 2 ? 'text-green-100' : 'text-gray-500'}`}>
+              <div className={`text-xs mb-1 ${winnerId === 2 ? 'text-white/70' : 'text-gray-500'}`}>
                 Player 2
               </div>
               <div className={`text-lg ${winnerId === 2 ? 'text-white' : 'text-gray-700'}`}>
@@ -129,7 +140,8 @@ export default function ScoringPage() {
                 min="0"
                 value={otherInputValue}
                 onChange={(e) => handleOtherPointsChange(e.target.value)}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-lg text-center focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent outline-none"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-lg text-center focus:ring-2 focus:border-transparent outline-none"
+                style={{ '--tw-ring-color': theme.primary } as React.CSSProperties}
                 placeholder="Enter 番"
               />
               <span className="text-lg text-gray-600">番</span>
@@ -144,7 +156,7 @@ export default function ScoringPage() {
           <div className="flex items-center justify-between mb-3">
             <span className="text-gray-700 font-medium">Total Points:</span>
             <div className="text-right">
-              <span className="text-3xl font-bold text-[#1B5E20]">{totalPoints}</span>
+              <span className="text-3xl font-bold" style={{ color: theme.primary }}>{totalPoints}</span>
               <span className="text-gray-600 ml-1">番</span>
             </div>
           </div>

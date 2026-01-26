@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useScoringStore } from '../stores/scoringStore';
+import { useThemeStore } from '../stores/themeStore';
 import ConfirmationSummary from '../components/scoring/ConfirmationSummary';
 
 export default function ConfirmationPage() {
@@ -11,6 +12,7 @@ export default function ConfirmationPage() {
   const winnerId = useScoringStore((state) => state.winnerId);
   const getTotalPoints = useScoringStore((state) => state.getTotalPoints);
   const resetScoring = useScoringStore((state) => state.reset);
+  const theme = useThemeStore((state) => state.theme);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +46,10 @@ export default function ConfirmationPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#1B5E20] text-white py-4 px-4 shadow-lg">
+      <div
+        className="text-white py-4 px-4 shadow-lg"
+        style={{ backgroundColor: theme.primary }}
+      >
         <div className="max-w-2xl mx-auto">
           <button
             onClick={handleBack}
@@ -68,10 +73,15 @@ export default function ConfirmationPage() {
         <div className="mt-6 space-y-3">
           <button
             onClick={handleConfirm}
-            className="w-full bg-[#1B5E20] hover:bg-[#145216] text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-            style={{ minHeight: '56px' }}
+            className="w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            style={{
+              minHeight: '56px',
+              backgroundColor: theme.primary,
+            }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = theme.primary}
           >
-            ✓ Confirm & Save
+            Confirm & Save
           </button>
           <button
             onClick={handleBack}

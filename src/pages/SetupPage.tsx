@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
+import { useThemeStore } from '../stores/themeStore';
 
 export default function SetupPage() {
   const [player1Name, setPlayer1Name] = useState('');
@@ -8,7 +9,12 @@ export default function SetupPage() {
   const [error, setError] = useState('');
 
   const createSession = useGameStore((state) => state.createSession);
+  const { theme, loadTheme } = useThemeStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    loadTheme();
+  }, [loadTheme]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,12 +37,17 @@ export default function SetupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-[#1B5E20] to-[#145216]">
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{
+        background: `linear-gradient(to bottom, ${theme.primary}, ${theme.primaryHover})`,
+      }}
+    >
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-[#1B5E20] mb-2">Mahjong KS</h1>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: theme.primary }}>Mahjong KS</h1>
             <p className="text-gray-600">Hong Kong Mahjong Scorer</p>
           </div>
 
@@ -51,7 +62,8 @@ export default function SetupPage() {
                 id="player1"
                 value={player1Name}
                 onChange={(e) => setPlayer1Name(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
+                style={{ '--tw-ring-color': theme.primary } as React.CSSProperties}
                 placeholder="Enter player 1 name"
                 autoComplete="off"
               />
@@ -66,7 +78,8 @@ export default function SetupPage() {
                 id="player2"
                 value={player2Name}
                 onChange={(e) => setPlayer2Name(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
+                style={{ '--tw-ring-color': theme.primary } as React.CSSProperties}
                 placeholder="Enter player 2 name"
                 autoComplete="off"
               />
@@ -80,8 +93,13 @@ export default function SetupPage() {
 
             <button
               type="submit"
-              className="w-full bg-[#1B5E20] hover:bg-[#145216] text-white font-semibold py-4 px-6 rounded-lg transition duration-200 shadow-lg hover:shadow-xl"
-              style={{ minHeight: '44px' }}
+              className="w-full text-white font-semibold py-4 px-6 rounded-lg transition duration-200 shadow-lg hover:shadow-xl"
+              style={{
+                minHeight: '44px',
+                backgroundColor: theme.primary,
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = theme.primary}
             >
               Start Game
             </button>
