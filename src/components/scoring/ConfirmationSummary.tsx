@@ -1,5 +1,6 @@
 import type { ScoringCriterion } from '../../types/game.types';
 import { useScoringStore } from '../../stores/scoringStore';
+import { useThemeStore } from '../../stores/themeStore';
 
 interface ConfirmationSummaryProps {
   winnerName: string;
@@ -13,13 +14,14 @@ export default function ConfirmationSummary({
   totalPoints,
 }: ConfirmationSummaryProps) {
   const otherPoints = useScoringStore((state) => state.otherPoints);
+  const theme = useThemeStore((state) => state.theme);
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
       {/* Winner */}
       <div className="text-center mb-6 pb-6 border-b border-gray-200">
         <p className="text-sm text-gray-600 mb-2">Winner</p>
-        <h2 className="text-3xl font-bold text-[#1B5E20]">{winnerName}</h2>
+        <h2 className="text-3xl font-bold" style={{ color: theme.primary }}>{winnerName}</h2>
       </div>
 
       {/* Scoring Breakdown */}
@@ -35,7 +37,7 @@ export default function ConfirmationSummary({
                 className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
               >
                 <span className="text-sm text-gray-700">{criterion.name}</span>
-                <span className="font-semibold text-[#1B5E20]">
+                <span className="font-semibold" style={{ color: theme.primary }}>
                   {criterion.id === 'other' ? otherPoints : criterion.points} 番
                 </span>
               </div>
@@ -45,7 +47,10 @@ export default function ConfirmationSummary({
       </div>
 
       {/* Total */}
-      <div className="bg-[#1B5E20] text-white rounded-lg p-6 text-center">
+      <div
+        className="text-white rounded-lg p-6 text-center"
+        style={{ backgroundColor: theme.primary }}
+      >
         <p className="text-sm opacity-90 mb-1">Total Points</p>
         <p className="text-5xl font-bold">{totalPoints}</p>
         <p className="text-sm opacity-90 mt-1">番</p>
