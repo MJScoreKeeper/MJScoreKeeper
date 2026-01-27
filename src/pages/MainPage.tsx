@@ -195,12 +195,16 @@ export default function MainPage() {
 
     setIsSaving(true);
 
+    // Calculate draw count
+    const drawCount = totalGames - (session.player1_win_count || 0) - (session.player2_win_count || 0);
+
     const result = await saveMatch({
       player1_name: session.player1_name,
       player2_name: session.player2_name,
       player1_total_points: session.player1_total_points,
       player2_total_points: session.player2_total_points,
       total_games: totalGames,
+      draw_count: drawCount,
       winner_name: winnerName,
     });
     setIsSaving(false);
