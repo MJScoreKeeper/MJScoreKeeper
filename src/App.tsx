@@ -8,6 +8,7 @@ import SetupPage from './pages/SetupPage';
 import MainPage from './pages/MainPage';
 import ScoringPage from './pages/ScoringPage';
 import ConfirmationPage from './pages/ConfirmationPage';
+import HistoryPage from './pages/HistoryPage';
 
 function App() {
   const gameSession = useGameStore((state) => state.session);
@@ -55,6 +56,7 @@ function App() {
         <Route path="/main" element={<MainPage />} />
         <Route path="/scoring" element={<ScoringPage />} />
         <Route path="/confirm" element={<ConfirmationPage />} />
+        <Route path="/history" element={<HistoryPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>

@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useThemeStore } from '../stores/themeStore';
+import { useHistoryStore } from '../stores/historyStore';
 import PlayerCard from '../components/game/PlayerCard';
 import GameHeader from '../components/game/GameHeader';
 import RecordWinButton from '../components/game/RecordWinButton';
 
 export default function MainPage() {
+  const [isSaving, setIsSaving] = useState(false);
   const session = useGameStore((state) => state.session);
   const loadSession = useGameStore((state) => state.loadSession);
   const startOver = useGameStore((state) => state.startOver);
   const resetGame = useGameStore((state) => state.resetGame);
   const { theme, loadTheme } = useThemeStore();
+  const saveMatch = useHistoryStore((state) => state.saveMatch);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +46,51 @@ export default function MainPage() {
     if (window.confirm('Reset completely? This will clear all data and return to the setup screen.')) {
       resetGame();
       navigate('/');
+    }
+  };
+
+  const handleEndMatch = async () => {
+    if (!session) return;
+
+    const totalGames = session.current_game_number - 1;
+    if (totalGames === 0) {
+      window.alert('No games have been played yet.');
+      return;
+    }
+
+    // Determine winner
+    let winnerName: string | null = null;
+    if (session.player1_total_points > session.player2_total_points) {
+      winnerName = session.player1_name;
+    } else if (session.player2_total_points > session.player1_total_points) {
+      winnerName = session.player2_name;
+    }
+    // If tied, winner_name stays null
+
+    const confirmMessage = winnerName
+      ? `End match? ${winnerName} wins!\n\nThis will save the match to history and start a new match.`
+      : `End match? It's a tie!\n\nThis will save the match to history and start a new match.`;
+
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    setIsSaving(true);
+    const result = await saveMatch({
+      player1_name: session.player1_name,
+      player2_name: session.player2_name,
+      player1_total_points: session.player1_total_points,
+      player2_total_points: session.player2_total_points,
+      total_games: totalGames,
+      winner_name: winnerName,
+    });
+    setIsSaving(false);
+
+    if (result.success) {
+      resetGame();
+      navigate('/');
+    } else {
+      window.alert(`Failed to save match: ${result.error}`);
     }
   };
 
@@ -95,6 +143,16 @@ export default function MainPage() {
           style={{ minHeight: '48px' }}
         >
           Start Over (Reset Scores)
+        </button>
+
+        {/* End Match Button */}
+        <button
+          onClick={handleEndMatch}
+          disabled={isSaving}
+          className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ minHeight: '48px' }}
+        >
+          {isSaving ? 'Saving...' : 'End Match & Save to History'}
         </button>
       </div>
     </div>

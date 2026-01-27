@@ -52,6 +52,10 @@ export default function SetupPage() {
     }
   };
 
+  const handleViewHistory = () => {
+    navigate('/history');
+  };
+
   const displayName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'User';
 
   return (
@@ -68,6 +72,12 @@ export default function SetupPage() {
           <div className="bg-white/20 px-3 py-2 rounded-lg">
             <span className="text-white text-sm">Hi, {displayName}</span>
           </div>
+          <button
+            onClick={handleViewHistory}
+            className="bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition text-white text-sm"
+          >
+            History
+          </button>
           <button
             onClick={handleLogout}
             className="bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition text-white text-sm"
