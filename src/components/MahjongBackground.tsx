@@ -67,7 +67,7 @@ export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundP
               </text>
             </g>
 
-            {/* Tile 3 - Circles (3 dots) */}
+            {/* Tile 3 - Circles (3 dots) - diagonal arrangement */}
             <g transform="translate(25, 80)">
               <rect
                 x="0"
@@ -79,9 +79,9 @@ export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundP
                 stroke="white"
                 strokeWidth="1.5"
               />
-              <circle cx="17.5" cy="18" r="5" fill="none" stroke="white" strokeWidth="1.5" />
-              <circle cx="10" cy="35" r="5" fill="none" stroke="white" strokeWidth="1.5" />
-              <circle cx="25" cy="35" r="5" fill="none" stroke="white" strokeWidth="1.5" />
+              <circle cx="10" cy="14" r="5" fill="none" stroke="white" strokeWidth="1.5" />
+              <circle cx="17.5" cy="25" r="5" fill="none" stroke="white" strokeWidth="1.5" />
+              <circle cx="25" cy="36" r="5" fill="none" stroke="white" strokeWidth="1.5" />
             </g>
           </pattern>
         </defs>
