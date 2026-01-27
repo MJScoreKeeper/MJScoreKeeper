@@ -1,62 +1,75 @@
-# Mahjong KS
+# MJ ScoreKeeper
 
-A mobile-first Hong Kong Mahjong scoring tracker app for two players.
+<!-- README locked for MJ ScoreKeeper -->
 
-**Live App:** https://garylchan.github.io/Mahjong-KS/
+MJ ScoreKeeper is a mobile-first Hong Kong Mahjong scoring tracker designed for
+two-player games. It focuses on simplicity, clarity, and ease of use during
+casual or friendly play.
+
+The app runs entirely in the browser, stores data locally, and works offline
+once loaded.
+
+Live demo:
+https://garylchan.github.io/Mahjong-KS/
+
+---
 
 ## Features
 
-- Track scores for two players
-- Hong Kong Mahjong scoring criteria (1-13 番)
-- Win count tracking per player
-- Custom "Other" option for additional 番
-- Data persists in browser localStorage
-- Works offline once loaded
+- Two-player Hong Kong Mahjong scoring
+- Track total score and win count
+- Support for common fan selections, including a customizable “Other” option
+- Local storage persistence (no account required)
+- Mobile-friendly UI
+- Works offline after initial load
 
-## Scoring Criteria
-
-### Basic (1 番)
-- 自摸 (Self-Drawn)
-- 門前清 (Concealed Hand)
-
-### Common (3 番)
-- 對對和 (All Pungs)
-- 混一色 (Mixed One Suit)
-
-### High Value (5-8 番)
-- 小三元 (Small Three Dragons) - 5 番
-- 小四喜 (Small Four Winds) - 6 番
-- 清一色 (Pure One Suit) - 7 番
-- 坎坎胡 (All Pungs Self-Drawn) - 8 番
-- 大三元 (Big Three Dragons) - 8 番
-
-### Special (10+ 番)
-- 字一色 (All Honors) - 10 番
-- 大四喜 (Big Four Winds) - 13 番
-- 天糊 (Heavenly Hand) - 13 番
-- 地糊 (Earthly Hand) - 13 番
+---
 
 ## Tech Stack
 
-- React 19 + TypeScript
+- React + TypeScript
 - Vite
 - Tailwind CSS
-- Zustand (state management)
+- Zustand for state management
 - React Router (HashRouter for GitHub Pages)
 
-## Development
+---
 
-```bash
-npm install
-npm run dev
-```
+## Disclaimer
 
-## Build
+This project is provided for personal and educational use.
 
-```bash
-npm run build
-```
+Mahjong scoring rules may vary by region, house rules, or player agreement.
+No guarantees are made regarding scoring accuracy or suitability for competitive
+or official play.
 
-## Deployment
+Use at your own discretion.
 
-Automatically deployed to GitHub Pages via GitHub Actions on push to main branch.
+---
+
+## Commercial Use
+
+The author reserves the right to offer commercial versions, hosted services,
+or additional features of this project under separate terms.
+
+This repository represents the open version of the project.
+
+---
+
+## Affiliation
+
+This project is not affiliated with, endorsed by, or associated with any
+official Mahjong organization or governing body.
+
+---
+
+## Trademark
+
+“M​​J ScoreKeeper” is a project name used by the author.
+Use of the name or branding is not permitted without permission.
+
+---
+
+## License
+
+This project is released under the MIT License.
