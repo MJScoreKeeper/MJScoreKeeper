@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { useThemeStore } from '../stores/themeStore';
+import MahjongBackground from '../components/MahjongBackground';
 
 type AuthMode = 'login' | 'register';
 
@@ -60,12 +61,15 @@ export default function AuthPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex items-center justify-center px-4 relative"
       style={{
         background: `linear-gradient(to bottom, ${theme.primary}, ${theme.primaryHover})`,
       }}
     >
-      <div className="w-full max-w-md">
+      {/* Mahjong Background */}
+      <MahjongBackground opacity={0.08} />
+
+      <div className="w-full max-w-md relative z-10">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">

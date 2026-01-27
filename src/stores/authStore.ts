@@ -13,6 +13,9 @@ interface AuthState {
   signUp: (email: string, password: string, displayName?: string) => Promise<{ success: boolean; error?: string }>;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signOut: () => Promise<void>;
+  updateProfile: (displayName: string) => Promise<{ success: boolean; error?: string }>;
+  updateEmail: (newEmail: string) => Promise<{ success: boolean; error?: string }>;
+  updatePassword: (newPassword: string) => Promise<{ success: boolean; error?: string }>;
   clearError: () => void;
 }
 
@@ -139,6 +142,58 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
       console.error('Error signing out:', error);
       set({ isLoading: false });
+    }
+  },
+
+  updateProfile: async (displayName: string) => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        data: { display_name: displayName },
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      set({ user: data.user });
+      return { success: true };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to update profile';
+      return { success: false, error: message };
+    }
+  },
+
+  updateEmail: async (newEmail: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        email: newEmail,
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to update email';
+      return { success: false, error: message };
+    }
+  },
+
+  updatePassword: async (newPassword: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to update password';
+      return { success: false, error: message };
     }
   },
 
