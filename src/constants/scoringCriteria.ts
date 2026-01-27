@@ -37,7 +37,9 @@ export const SCORING_CATEGORIES: ScoringCategory[] = [
     name: 'Special Hands (10+ 番)',
     criteria: [
       { id: 'all-honors', name: '字一色 (All Honors)', points: 10, category: 'special' },
+      { id: 'nine-gates', name: '九子連環 (Nine Gates)', points: 10, category: 'special' },
       { id: 'big-four-winds', name: '大四喜 (Big Four Winds)', points: 13, category: 'special' },
+      { id: 'eighteen-arhats', name: '十八羅漢 (Eighteen Arhats)', points: 13, category: 'special' },
       { id: 'heavenly-hand', name: '天糊 (Heavenly Hand)', points: 13, category: 'special' },
       { id: 'earthly-hand', name: '地糊 (Earthly Hand)', points: 13, category: 'special' },
     ],
