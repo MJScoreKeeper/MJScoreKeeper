@@ -147,8 +147,11 @@ export default function ConfirmationPage() {
           <button
             onClick={handleBack}
             disabled={showCelebration}
-            className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50"
-            style={{ minHeight: '48px' }}
+            className="w-full text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50"
+            style={{
+              minHeight: '48px',
+              backgroundColor: `${theme.primary}80`,
+            }}
           >
             Edit Scoring
           </button>

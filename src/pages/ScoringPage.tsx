@@ -167,8 +167,13 @@ export default function ScoringPage() {
           <button
             onClick={handleContinue}
             disabled={winnerId === null}
-            className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 shadow-lg"
-            style={{ minHeight: '56px' }}
+            className="w-full disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            style={{
+              minHeight: '56px',
+              backgroundColor: winnerId === null ? undefined : theme.primary,
+            }}
+            onMouseOver={(e) => winnerId !== null && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+            onMouseOut={(e) => winnerId !== null && (e.currentTarget.style.backgroundColor = theme.primary)}
           >
             {winnerId === null ? 'Select a Winner' : 'Continue →'}
           </button>
