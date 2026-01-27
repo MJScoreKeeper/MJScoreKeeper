@@ -4,6 +4,7 @@ import { useGameStore } from '../stores/gameStore';
 import { useScoringStore } from '../stores/scoringStore';
 import { useThemeStore } from '../stores/themeStore';
 import ConfirmationSummary from '../components/scoring/ConfirmationSummary';
+import MahjongBackground from '../components/MahjongBackground';
 
 export default function ConfirmationPage() {
   const session = useGameStore((state) => state.session);
@@ -44,10 +45,13 @@ export default function ConfirmationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* Mahjong Background */}
+      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+
       {/* Header */}
       <div
-        className="text-white py-4 px-4 shadow-lg"
+        className="text-white py-4 px-4 shadow-lg relative z-10"
         style={{ backgroundColor: theme.primary }}
       >
         <div className="max-w-2xl mx-auto">
@@ -62,7 +66,7 @@ export default function ConfirmationPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-6 relative z-10">
         <ConfirmationSummary
           winnerName={winnerName}
           criteria={selectedCriteria}

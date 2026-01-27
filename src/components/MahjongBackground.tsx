@@ -1,8 +1,9 @@
 interface MahjongBackgroundProps {
   opacity?: number;
+  color?: string;
 }
 
-export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundProps) {
+export default function MahjongBackground({ opacity = 0.06, color = 'white' }: MahjongBackgroundProps) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <svg
@@ -12,7 +13,7 @@ export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundP
       >
         <defs>
           <pattern
-            id="mahjong-pattern"
+            id={`mahjong-pattern-${color.replace('#', '')}`}
             x="0"
             y="0"
             width="100"
@@ -28,14 +29,14 @@ export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundP
                 height="50"
                 rx="3"
                 fill="none"
-                stroke="white"
+                stroke={color}
                 strokeWidth="1.5"
               />
               <text
                 x="17.5"
                 y="33"
                 fontSize="20"
-                fill="white"
+                fill={color}
                 textAnchor="middle"
                 fontWeight="bold"
               >
@@ -52,14 +53,14 @@ export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundP
                 height="50"
                 rx="3"
                 fill="none"
-                stroke="white"
+                stroke={color}
                 strokeWidth="1.5"
               />
               <text
                 x="17.5"
                 y="33"
                 fontSize="20"
-                fill="white"
+                fill={color}
                 textAnchor="middle"
                 fontWeight="bold"
               >
@@ -76,16 +77,16 @@ export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundP
                 height="50"
                 rx="3"
                 fill="none"
-                stroke="white"
+                stroke={color}
                 strokeWidth="1.5"
               />
-              <circle cx="10" cy="14" r="5" fill="none" stroke="white" strokeWidth="1.5" />
-              <circle cx="17.5" cy="25" r="5" fill="none" stroke="white" strokeWidth="1.5" />
-              <circle cx="25" cy="36" r="5" fill="none" stroke="white" strokeWidth="1.5" />
+              <circle cx="10" cy="14" r="5" fill="none" stroke={color} strokeWidth="1.5" />
+              <circle cx="17.5" cy="25" r="5" fill="none" stroke={color} strokeWidth="1.5" />
+              <circle cx="25" cy="36" r="5" fill="none" stroke={color} strokeWidth="1.5" />
             </g>
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#mahjong-pattern)" />
+        <rect width="100%" height="100%" fill={`url(#mahjong-pattern-${color.replace('#', '')})`} />
       </svg>
     </div>
   );

@@ -5,6 +5,7 @@ import { useScoringStore } from '../stores/scoringStore';
 import { useThemeStore } from '../stores/themeStore';
 import { SCORING_CATEGORIES } from '../constants/scoringCriteria';
 import ScoringChecklist from '../components/scoring/ScoringChecklist';
+import MahjongBackground from '../components/MahjongBackground';
 
 export default function ScoringPage() {
   const session = useGameStore((state) => state.session);
@@ -59,10 +60,13 @@ export default function ScoringPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-50 pb-24 relative">
+      {/* Mahjong Background */}
+      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+
       {/* Header */}
       <div
-        className="text-white py-4 px-4 shadow-lg sticky top-0 z-10"
+        className="text-white py-4 px-4 shadow-lg sticky top-0 z-20"
         style={{ backgroundColor: theme.primary }}
       >
         <div className="max-w-2xl mx-auto">
@@ -72,12 +76,12 @@ export default function ScoringPage() {
           >
             ← Back
           </button>
-          <h1 className="text-xl font-bold">Select Scoring Criteria</h1>
+          <h1 className="text-xl font-bold">Select Scoring Elements</h1>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-6 relative z-10">
         {/* Winner Selection */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Who won?</h2>

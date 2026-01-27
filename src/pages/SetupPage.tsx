@@ -185,8 +185,7 @@ export default function SetupPage() {
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: theme.primary }}>Mahjong KS</h1>
-            <p className="text-gray-600">Hong Kong Mahjong Scorer</p>
+            <h1 className="text-3xl font-bold" style={{ color: theme.primary }}>HK Mahjong Scorer</h1>
           </div>
 
           {/* Form */}
@@ -243,10 +242,6 @@ export default function SetupPage() {
             </button>
           </form>
         </div>
-
-        <p className="text-center text-white text-sm mt-6">
-          Start tracking your Mahjong games
-        </p>
       </div>
 
       {/* Settings Modal */}

@@ -74,7 +74,7 @@ export default function AuthPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-2" style={{ color: theme.primary }}>
-              Mahjong KS
+              HK Mahjong Scorer
             </h1>
             <p className="text-gray-600">
               {mode === 'login' ? 'Welcome back!' : 'Create your account'}
@@ -184,10 +184,6 @@ export default function AuthPage() {
             </p>
           </div>
         </div>
-
-        <p className="text-center text-white text-sm mt-6">
-          Hong Kong Mahjong Scorer
-        </p>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { useHistoryStore } from '../stores/historyStore';
 import PlayerCard from '../components/game/PlayerCard';
 import GameHeader from '../components/game/GameHeader';
 import RecordWinButton from '../components/game/RecordWinButton';
+import MahjongBackground from '../components/MahjongBackground';
 
 export default function MainPage() {
   const [isSaving, setIsSaving] = useState(false);
@@ -95,14 +96,17 @@ export default function MainPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative">
+      {/* Mahjong Background */}
+      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+
       {/* Header */}
       <div
-        className="text-white py-4 px-4 shadow-lg"
+        className="text-white py-4 px-4 shadow-lg relative z-10"
         style={{ backgroundColor: theme.primary }}
       >
         <div className="max-w-2xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">Mahjong KS</h1>
+          <h1 className="text-xl font-bold">HK Mahjong Scorer</h1>
           <button
             onClick={handleResetGame}
             className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded transition"
@@ -113,7 +117,7 @@ export default function MainPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
+      <div className="max-w-2xl mx-auto px-4 py-4 space-y-3 relative z-10">
         {/* Game Number */}
         <GameHeader gameNumber={session.current_game_number} />
 

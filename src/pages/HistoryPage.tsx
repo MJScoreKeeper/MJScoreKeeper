@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHistoryStore, type MatchHistory } from '../stores/historyStore';
 import { useThemeStore } from '../stores/themeStore';
+import MahjongBackground from '../components/MahjongBackground';
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -113,10 +114,13 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative">
+      {/* Mahjong Background */}
+      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+
       {/* Header */}
       <div
-        className="text-white py-4 px-4 shadow-lg"
+        className="text-white py-4 px-4 shadow-lg relative z-10"
         style={{ backgroundColor: theme.primary }}
       >
         <div className="max-w-2xl mx-auto flex justify-between items-center">
@@ -135,7 +139,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
+      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4 relative z-10">
         {isLoading && (
           <div className="text-center py-8 text-gray-500">
             Loading matches...
