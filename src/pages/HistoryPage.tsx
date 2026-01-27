@@ -82,7 +82,12 @@ function MatchCard({ match, onDelete }: MatchCardProps) {
       <div className="flex justify-between items-center pt-2 border-t border-gray-100">
         <div className="text-sm text-gray-500">
           {match.total_games} {match.total_games === 1 ? 'game' : 'games'} played
-          {isDraw && <span className="ml-2 text-amber-600 font-medium">• Draw</span>}
+          {match.draw_count && match.draw_count > 0 && (
+            <span className="ml-1 text-gray-400">
+              • {match.draw_count} {match.draw_count === 1 ? 'draw' : 'draws'}
+            </span>
+          )}
+          {isDraw && <span className="ml-2 text-amber-600 font-medium">• Tied</span>}
         </div>
         <button
           onClick={handleDelete}

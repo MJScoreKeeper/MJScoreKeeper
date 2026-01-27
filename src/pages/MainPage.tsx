@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useThemeStore } from '../stores/themeStore';
@@ -8,8 +8,96 @@ import GameHeader from '../components/game/GameHeader';
 import RecordWinButton from '../components/game/RecordWinButton';
 import MahjongBackground from '../components/MahjongBackground';
 
+function CelebrationEffect({ winnerName }: { winnerName: string | null }) {
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; delay: number; color: string; size: number; rotation: number }>>([]);
+
+  useEffect(() => {
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#FF69B4', '#00CED1'];
+    const newParticles = Array.from({ length: 100 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      delay: Math.random() * 1,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: Math.random() * 8 + 4,
+      rotation: Math.random() * 360,
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+      {/* Confetti particles */}
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          className="absolute rounded-full animate-confetti-fall"
+          style={{
+            left: `${particle.x}%`,
+            top: '-20px',
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            backgroundColor: particle.color,
+            animationDelay: `${particle.delay}s`,
+          }}
+        />
+      ))}
+      {/* Winner announcement */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mx-4 animate-bounce-in text-center">
+          <div className="text-6xl mb-4">🏆</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            {winnerName ? `${winnerName} Wins!` : "It's a Tie!"}
+          </h2>
+          <p className="text-gray-600">Match saved to history</p>
+        </div>
+      </div>
+      <style>{`
+        @keyframes confetti-fall {
+          0% {
+            transform: translateY(0) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(1080deg) scale(0.5);
+            opacity: 0;
+          }
+        }
+        .animate-confetti-fall {
+          animation: confetti-fall 3s ease-out forwards;
+        }
+        @keyframes bounce-in {
+          0% {
+            transform: scale(0.3);
+            opacity: 0;
+          }
+          50% {
+            transform: scale(1.05);
+          }
+          70% {
+            transform: scale(0.95);
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+        .animate-bounce-in {
+          animation: bounce-in 0.6s ease-out forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function MainPage() {
   const [isSaving, setIsSaving] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationWinner, setCelebrationWinner] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const session = useGameStore((state) => state.session);
   const loadSession = useGameStore((state) => state.loadSession);
   const startOver = useGameStore((state) => state.startOver);
@@ -30,6 +118,17 @@ export default function MainPage() {
     }
   }, [session, navigate]);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   if (!session) {
     return null;
   }
@@ -37,6 +136,12 @@ export default function MainPage() {
   // Determine who is leading
   const player1Leading = session.player1_total_points > session.player2_total_points;
   const player2Leading = session.player2_total_points > session.player1_total_points;
+
+  // Calculate lighter/darker shades of theme color for buttons
+  const buttonShades = {
+    recordDraw: `${theme.primary}99`, // 60% opacity version
+    endMatch: `${theme.primary}CC`, // 80% opacity version
+  };
 
   const handleRecordWin = () => {
     navigate('/scoring');
@@ -51,11 +156,12 @@ export default function MainPage() {
   const handleStartOver = () => {
     if (window.confirm('Start over? This will reset all scores and game number to 1.')) {
       startOver();
+      setMenuOpen(false);
     }
   };
 
   const handleResetGame = () => {
-    if (window.confirm('Reset completely? This will clear all data and return to the setup screen.')) {
+    if (window.confirm('Start a new match with new players? This will clear all current data.')) {
       resetGame();
       navigate('/');
     }
@@ -88,6 +194,10 @@ export default function MainPage() {
     }
 
     setIsSaving(true);
+
+    // Calculate draw count
+    const drawCount = totalGames - (session.player1_win_count || 0) - (session.player2_win_count || 0);
+
     const result = await saveMatch({
       player1_name: session.player1_name,
       player2_name: session.player2_name,
@@ -95,12 +205,20 @@ export default function MainPage() {
       player2_total_points: session.player2_total_points,
       total_games: totalGames,
       winner_name: winnerName,
+      draw_count: drawCount,
     });
     setIsSaving(false);
 
     if (result.success) {
-      resetGame();
-      navigate('/');
+      // Show celebration
+      setCelebrationWinner(winnerName);
+      setShowCelebration(true);
+
+      // Navigate after celebration
+      setTimeout(() => {
+        resetGame();
+        navigate('/');
+      }, 2500);
     } else {
       window.alert(`Failed to save match: ${result.error}`);
     }
@@ -108,6 +226,9 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative">
+      {/* Celebration Effect */}
+      {showCelebration && <CelebrationEffect winnerName={celebrationWinner} />}
+
       {/* Mahjong Background */}
       <MahjongBackground opacity={0.08} color="#9CA3AF" />
 
@@ -118,12 +239,47 @@ export default function MainPage() {
       >
         <div className="max-w-2xl mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold">MJ ScoreKeeper</h1>
-          <button
-            onClick={handleResetGame}
-            className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded transition"
-          >
-            New Match
-          </button>
+          {/* Menu Button */}
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 hover:bg-white/20 rounded transition"
+              aria-label="Menu"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            {/* Dropdown Menu */}
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-20">
+                <button
+                  onClick={handleStartOver}
+                  className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 transition flex items-center gap-3"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <div>
+                    <div className="font-medium">Start Over</div>
+                    <div className="text-xs text-gray-500">Reset scores to zero</div>
+                  </div>
+                </button>
+                <button
+                  onClick={handleResetGame}
+                  className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 transition flex items-center gap-3"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <div>
+                    <div className="font-medium">New Match</div>
+                    <div className="text-xs text-gray-500">Start with new players</div>
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -153,30 +309,27 @@ export default function MainPage() {
         {/* Record Win Button */}
         <RecordWinButton onClick={handleRecordWin} />
 
-        {/* Draw Button */}
+        {/* Record Draw Button */}
         <button
           onClick={handleDraw}
-          className="w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200"
-          style={{ minHeight: '48px' }}
+          className="w-full text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200"
+          style={{
+            minHeight: '48px',
+            backgroundColor: buttonShades.recordDraw,
+          }}
         >
-          Draw (No Winner)
-        </button>
-
-        {/* Start Over Button */}
-        <button
-          onClick={handleStartOver}
-          className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200"
-          style={{ minHeight: '48px' }}
-        >
-          Start Over (Reset Scores)
+          Record Draw
         </button>
 
         {/* End Match Button */}
         <button
           onClick={handleEndMatch}
-          disabled={isSaving}
-          className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ minHeight: '48px' }}
+          disabled={isSaving || showCelebration}
+          className="w-full text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            minHeight: '48px',
+            backgroundColor: buttonShades.endMatch,
+          }}
         >
           {isSaving ? 'Saving...' : 'End Match & Save to History'}
         </button>

@@ -21,11 +21,8 @@ export default function PlayerCard({ name, totalPoints, winCount, playerNumber, 
       <div className="flex justify-between items-start mb-1">
         <span className="text-sm font-medium text-gray-500">Player {playerNumber}</span>
         {isLeading && (
-          <span
-            className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
-            style={{ backgroundColor: theme.primary }}
-          >
-            Leading
+          <span className="text-2xl" role="img" aria-label="Leading">
+            👏
           </span>
         )}
       </div>

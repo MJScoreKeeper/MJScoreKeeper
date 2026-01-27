@@ -10,6 +10,7 @@ export interface MatchHistory {
   player1_total_points: number;
   player2_total_points: number;
   total_games: number;
+  draw_count?: number;
   winner_name: string | null;
   created_at: string;
   ended_at: string;
@@ -75,6 +76,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
           player1_total_points: match.player1_total_points,
           player2_total_points: match.player2_total_points,
           total_games: match.total_games,
+          draw_count: match.draw_count ?? 0,
           winner_name: match.winner_name,
         });
 
