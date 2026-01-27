@@ -2,7 +2,7 @@ interface MahjongBackgroundProps {
   opacity?: number;
 }
 
-export default function MahjongBackground({ opacity = 0.05 }: MahjongBackgroundProps) {
+export default function MahjongBackground({ opacity = 0.06 }: MahjongBackgroundProps) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <svg
@@ -15,27 +15,26 @@ export default function MahjongBackground({ opacity = 0.05 }: MahjongBackgroundP
             id="mahjong-pattern"
             x="0"
             y="0"
-            width="120"
-            height="160"
+            width="100"
+            height="140"
             patternUnits="userSpaceOnUse"
           >
-            {/* Mahjong tile 1 */}
+            {/* Tile 1 - Red Dragon 中 */}
             <g transform="translate(10, 10)">
               <rect
                 x="0"
                 y="0"
-                width="40"
-                height="56"
-                rx="4"
-                fill="white"
+                width="35"
+                height="50"
+                rx="3"
+                fill="none"
                 stroke="white"
-                strokeWidth="1"
+                strokeWidth="1.5"
               />
-              {/* Red Dragon symbol */}
               <text
-                x="20"
-                y="36"
-                fontSize="24"
+                x="17.5"
+                y="33"
+                fontSize="20"
                 fill="white"
                 textAnchor="middle"
                 fontWeight="bold"
@@ -44,23 +43,22 @@ export default function MahjongBackground({ opacity = 0.05 }: MahjongBackgroundP
               </text>
             </g>
 
-            {/* Mahjong tile 2 */}
-            <g transform="translate(70, 30)">
+            {/* Tile 2 - Green Dragon 發 */}
+            <g transform="translate(55, 25)">
               <rect
                 x="0"
                 y="0"
-                width="40"
-                height="56"
-                rx="4"
-                fill="white"
+                width="35"
+                height="50"
+                rx="3"
+                fill="none"
                 stroke="white"
-                strokeWidth="1"
+                strokeWidth="1.5"
               />
-              {/* Bamboo/Stick symbol */}
               <text
-                x="20"
-                y="36"
-                fontSize="24"
+                x="17.5"
+                y="33"
+                fontSize="20"
                 fill="white"
                 textAnchor="middle"
                 fontWeight="bold"
@@ -69,22 +67,21 @@ export default function MahjongBackground({ opacity = 0.05 }: MahjongBackgroundP
               </text>
             </g>
 
-            {/* Mahjong tile 3 */}
-            <g transform="translate(30, 90)">
+            {/* Tile 3 - Circles (3 dots) */}
+            <g transform="translate(25, 80)">
               <rect
                 x="0"
                 y="0"
-                width="40"
-                height="56"
-                rx="4"
-                fill="white"
+                width="35"
+                height="50"
+                rx="3"
+                fill="none"
                 stroke="white"
-                strokeWidth="1"
+                strokeWidth="1.5"
               />
-              {/* Circle/Dot pattern */}
-              <circle cx="20" cy="22" r="6" fill="white" />
-              <circle cx="12" cy="38" r="6" fill="white" />
-              <circle cx="28" cy="38" r="6" fill="white" />
+              <circle cx="17.5" cy="18" r="5" fill="none" stroke="white" strokeWidth="1.5" />
+              <circle cx="10" cy="35" r="5" fill="none" stroke="white" strokeWidth="1.5" />
+              <circle cx="25" cy="35" r="5" fill="none" stroke="white" strokeWidth="1.5" />
             </g>
           </pattern>
         </defs>
