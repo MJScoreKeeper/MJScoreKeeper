@@ -74,7 +74,7 @@ export default function AuthPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-2" style={{ color: theme.primary }}>
-              HK Mahjong Scorer
+              MJ ScoreKeeper
             </h1>
             <p className="text-gray-600">
               {mode === 'login' ? 'Welcome back!' : 'Create your account'}

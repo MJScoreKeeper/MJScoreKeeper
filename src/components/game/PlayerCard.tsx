@@ -5,15 +5,29 @@ interface PlayerCardProps {
   totalPoints: number;
   winCount: number;
   playerNumber: 1 | 2;
+  isLeading?: boolean;
 }
 
-export default function PlayerCard({ name, totalPoints, winCount, playerNumber }: PlayerCardProps) {
+export default function PlayerCard({ name, totalPoints, winCount, playerNumber, isLeading }: PlayerCardProps) {
   const theme = useThemeStore((state) => state.theme);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 border-2 border-gray-100">
+    <div
+      className={`bg-white rounded-xl shadow-lg p-4 border-2 transition-all duration-300 ${
+        isLeading ? 'scale-[1.02]' : 'border-gray-100'
+      }`}
+      style={isLeading ? { borderColor: theme.primary, boxShadow: `0 4px 20px ${theme.primary}40` } : {}}
+    >
       <div className="flex justify-between items-start mb-1">
         <span className="text-sm font-medium text-gray-500">Player {playerNumber}</span>
+        {isLeading && (
+          <span
+            className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
+            style={{ backgroundColor: theme.primary }}
+          >
+            Leading
+          </span>
+        )}
       </div>
       <h2 className="text-xl font-bold text-gray-900 mb-2">{name}</h2>
       <div className="flex justify-between items-baseline">

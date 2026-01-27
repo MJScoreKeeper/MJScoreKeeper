@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useScoringStore } from '../stores/scoringStore';
@@ -6,7 +6,55 @@ import { useThemeStore } from '../stores/themeStore';
 import ConfirmationSummary from '../components/scoring/ConfirmationSummary';
 import MahjongBackground from '../components/MahjongBackground';
 
+function CelebrationEffect() {
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; delay: number; color: string }>>([]);
+
+  useEffect(() => {
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
+    const newParticles = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      delay: Math.random() * 0.5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          className="absolute w-3 h-3 rounded-full animate-confetti"
+          style={{
+            left: `${particle.x}%`,
+            top: '-10px',
+            backgroundColor: particle.color,
+            animationDelay: `${particle.delay}s`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes confetti {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+          }
+        }
+        .animate-confetti {
+          animation: confetti 2.5s ease-out forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function ConfirmationPage() {
+  const [showCelebration, setShowCelebration] = useState(false);
   const session = useGameStore((state) => state.session);
   const recordWin = useGameStore((state) => state.recordWin);
   const selectedCriteria = useScoringStore((state) => state.selectedCriteria);
@@ -30,14 +78,19 @@ export default function ConfirmationPage() {
   const winnerName = winnerId === 1 ? session.player1_name : session.player2_name;
 
   const handleConfirm = () => {
+    // Show celebration
+    setShowCelebration(true);
+
     // Record the win
     recordWin(winnerId, totalPoints, selectedCriteria);
 
     // Reset scoring store
     resetScoring();
 
-    // Navigate back to main page
-    navigate('/main');
+    // Navigate back to main page after celebration
+    setTimeout(() => {
+      navigate('/main');
+    }, 1500);
   };
 
   const handleBack = () => {
@@ -46,6 +99,9 @@ export default function ConfirmationPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
+      {/* Celebration Effect */}
+      {showCelebration && <CelebrationEffect />}
+
       {/* Mahjong Background */}
       <MahjongBackground opacity={0.08} color="#9CA3AF" />
 
@@ -77,19 +133,21 @@ export default function ConfirmationPage() {
         <div className="mt-6 space-y-3">
           <button
             onClick={handleConfirm}
-            className="w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            disabled={showCelebration}
+            className="w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-70"
             style={{
               minHeight: '56px',
               backgroundColor: theme.primary,
             }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = theme.primary}
+            onMouseOver={(e) => !showCelebration && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+            onMouseOut={(e) => !showCelebration && (e.currentTarget.style.backgroundColor = theme.primary)}
           >
-            Confirm & Save
+            {showCelebration ? 'Recorded!' : 'Confirm & Save'}
           </button>
           <button
             onClick={handleBack}
-            className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-all duration-200"
+            disabled={showCelebration}
+            className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50"
             style={{ minHeight: '48px' }}
           >
             Edit Scoring

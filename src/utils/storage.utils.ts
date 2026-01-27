@@ -3,6 +3,7 @@ import type { GameSession, GameResult } from '../types/game.types';
 const STORAGE_KEYS = {
   GAME_SESSION: 'mahjong-game-session',
   GAME_RESULTS: 'mahjong-game-results',
+  LAST_PLAYER_NAMES: 'mahjong-last-player-names',
 } as const;
 
 export const storage = {
@@ -65,5 +66,24 @@ export const storage = {
   clearAll(): void {
     this.clearGameSession();
     this.clearGameResults();
+  },
+
+  // Last Used Player Names
+  saveLastPlayerNames(player1: string, player2: string): void {
+    try {
+      localStorage.setItem(STORAGE_KEYS.LAST_PLAYER_NAMES, JSON.stringify({ player1, player2 }));
+    } catch (error) {
+      console.error('Failed to save player names:', error);
+    }
+  },
+
+  getLastPlayerNames(): { player1: string; player2: string } | null {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.LAST_PLAYER_NAMES);
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error('Failed to get player names:', error);
+      return null;
+    }
   },
 };

@@ -14,6 +14,7 @@ export default function MainPage() {
   const loadSession = useGameStore((state) => state.loadSession);
   const startOver = useGameStore((state) => state.startOver);
   const resetGame = useGameStore((state) => state.resetGame);
+  const recordDraw = useGameStore((state) => state.recordDraw);
   const { theme, loadTheme } = useThemeStore();
   const saveMatch = useHistoryStore((state) => state.saveMatch);
   const navigate = useNavigate();
@@ -33,8 +34,18 @@ export default function MainPage() {
     return null;
   }
 
+  // Determine who is leading
+  const player1Leading = session.player1_total_points > session.player2_total_points;
+  const player2Leading = session.player2_total_points > session.player1_total_points;
+
   const handleRecordWin = () => {
     navigate('/scoring');
+  };
+
+  const handleDraw = () => {
+    if (window.confirm('Record this game as a draw? No points will be awarded.')) {
+      recordDraw();
+    }
   };
 
   const handleStartOver = () => {
@@ -106,7 +117,7 @@ export default function MainPage() {
         style={{ backgroundColor: theme.primary }}
       >
         <div className="max-w-2xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">HK Mahjong Scorer</h1>
+          <h1 className="text-xl font-bold">MJ ScoreKeeper</h1>
           <button
             onClick={handleResetGame}
             className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded transition"
@@ -128,17 +139,28 @@ export default function MainPage() {
             totalPoints={session.player1_total_points}
             winCount={session.player1_win_count || 0}
             playerNumber={1}
+            isLeading={player1Leading}
           />
           <PlayerCard
             name={session.player2_name}
             totalPoints={session.player2_total_points}
             winCount={session.player2_win_count || 0}
             playerNumber={2}
+            isLeading={player2Leading}
           />
         </div>
 
         {/* Record Win Button */}
         <RecordWinButton onClick={handleRecordWin} />
+
+        {/* Draw Button */}
+        <button
+          onClick={handleDraw}
+          className="w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow transition-all duration-200"
+          style={{ minHeight: '48px' }}
+        >
+          Draw (No Winner)
+        </button>
 
         {/* Start Over Button */}
         <button

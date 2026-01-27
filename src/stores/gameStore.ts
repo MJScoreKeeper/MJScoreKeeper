@@ -12,6 +12,7 @@ interface GameStore {
   loadSession: () => void;
   createSession: (player1Name: string, player2Name: string) => void;
   recordWin: (winnerId: 1 | 2, points: number, scoringCriteria: any[]) => void;
+  recordDraw: () => void; // Record a draw (no winner, just advance game number)
   startOver: () => void; // Reset scores but keep player names
   resetGame: () => void; // Clear everything and go back to setup
 }
@@ -41,6 +42,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
 
     storage.saveGameSession(session);
+    storage.saveLastPlayerNames(player1Name, player2Name);
     storage.clearGameResults();
     set({ session, results: [] });
   },
@@ -89,6 +91,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       session: updatedSession,
       results: [...get().results, result]
     });
+  },
+
+  recordDraw: () => {
+    const { session } = get();
+    if (!session) return;
+
+    const now = new Date().toISOString();
+    const updatedSession: GameSession = {
+      ...session,
+      current_game_number: session.current_game_number + 1,
+      updated_at: now,
+    };
+
+    storage.saveGameSession(updatedSession);
+    set({ session: updatedSession });
   },
 
   startOver: () => {
