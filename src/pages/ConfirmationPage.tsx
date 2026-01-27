@@ -47,7 +47,7 @@ export default function ConfirmationPage() {
   return (
     <div className="min-h-screen bg-gray-50 relative">
       {/* Mahjong Background */}
-      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+      <MahjongBackground opacity={0.08} color="#9CA3AF" />
 
       {/* Header */}
       <div

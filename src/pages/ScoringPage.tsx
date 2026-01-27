@@ -62,7 +62,7 @@ export default function ScoringPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-24 relative">
       {/* Mahjong Background */}
-      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+      <MahjongBackground opacity={0.08} color="#9CA3AF" />
 
       {/* Header */}
       <div
@@ -155,7 +155,7 @@ export default function ScoringPage() {
       </div>
 
       {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-200 shadow-2xl">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-200 shadow-2xl z-30">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <span className="text-gray-700 font-medium">Total Points:</span>

@@ -98,7 +98,7 @@ export default function MainPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative">
       {/* Mahjong Background */}
-      <MahjongBackground opacity={0.04} color="#9CA3AF" />
+      <MahjongBackground opacity={0.08} color="#9CA3AF" />
 
       {/* Header */}
       <div
