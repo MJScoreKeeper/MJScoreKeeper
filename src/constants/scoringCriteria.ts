@@ -6,6 +6,14 @@ export const SCORING_CATEGORIES: ScoringCategory[] = [
     criteria: [
       { id: 'self-drawn', name: '自摸 (Self-Drawn)', points: 1, category: 'basic' },
       { id: 'concealed-hand', name: '門前清 (Concealed Hand)', points: 1, category: 'basic' },
+      { id: 'red-dragon', name: '紅中 (Red Dragon)', points: 1, category: 'basic' },
+      { id: 'green-dragon', name: '發財 (Green Dragon)', points: 1, category: 'basic' },
+      { id: 'white-dragon', name: '白板 (White Dragon)', points: 1, category: 'basic' },
+      { id: 'prevailing-wind', name: '圈風牌 (Prevailing Wind)', points: 1, category: 'basic' },
+      { id: 'seat-wind', name: '門風 (Seat Wind)', points: 1, category: 'basic' },
+      { id: 'robbing-kong', name: '搶槓 (Robbing the Kong)', points: 1, category: 'basic' },
+      { id: 'last-tile', name: '海底撈月 (Last Tile Draw)', points: 1, category: 'basic' },
+      { id: 'all-chows', name: '平糊 (All Chows)', points: 1, category: 'basic' },
     ],
   },
   {
