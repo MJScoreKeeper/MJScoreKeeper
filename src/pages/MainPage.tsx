@@ -195,9 +195,6 @@ export default function MainPage() {
 
     setIsSaving(true);
 
-    // Calculate draw count
-    const drawCount = totalGames - (session.player1_win_count || 0) - (session.player2_win_count || 0);
-
     const result = await saveMatch({
       player1_name: session.player1_name,
       player2_name: session.player2_name,
@@ -205,7 +202,6 @@ export default function MainPage() {
       player2_total_points: session.player2_total_points,
       total_games: totalGames,
       winner_name: winnerName,
-      draw_count: drawCount,
     });
     setIsSaving(false);
 
@@ -234,7 +230,7 @@ export default function MainPage() {
 
       {/* Header */}
       <div
-        className="text-white py-4 px-4 shadow-lg relative z-10"
+        className="text-white py-4 px-4 shadow-lg relative z-30"
         style={{ backgroundColor: theme.primary }}
       >
         <div className="max-w-2xl mx-auto flex justify-between items-center">
@@ -252,7 +248,7 @@ export default function MainPage() {
             </button>
             {/* Dropdown Menu */}
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-20">
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-40">
                 <button
                   onClick={handleStartOver}
                   className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 transition flex items-center gap-3"
