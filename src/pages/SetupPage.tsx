@@ -508,17 +508,49 @@ export default function SetupPage() {
               {menuView === 'about' && (
                 <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
                   <p>
-                    MJ ScoreKeeper is a simple, mobile-first scorekeeping app designed for two-player Hong Kong Mahjong games.
+                    MJ ScoreKeeper tracks scores (番), payout amounts ($), and net money total.
                   </p>
-                  <p>
-                    It is built for casual and friendly play, where players want a fast and clear way to track scores, wins, and hands without interrupting the flow of the game.
-                  </p>
-                  <p>
-                    The app runs entirely on the device, requires no account to use, and works offline once loaded.
-                  </p>
-                  <p>
-                    MJ ScoreKeeper focuses on clarity, ease of use, and sharing a single active match between players.
-                  </p>
+
+                  {/* Payout Reference */}
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Payout Reference (一二蚊)</h3>
+                    <div className="bg-gray-50 rounded-lg overflow-hidden">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-gray-200">
+                            <th className="px-4 py-2 text-left font-medium text-gray-600">番</th>
+                            <th className="px-4 py-2 text-right font-medium text-gray-600">Payout</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b border-gray-100">
+                            <td className="px-4 py-2">3番</td>
+                            <td className="px-4 py-2 text-right font-medium">$32</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="px-4 py-2">4番</td>
+                            <td className="px-4 py-2 text-right font-medium">$64</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="px-4 py-2">5番</td>
+                            <td className="px-4 py-2 text-right font-medium">$128</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="px-4 py-2">6番</td>
+                            <td className="px-4 py-2 text-right font-medium">$256</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="px-4 py-2">7番</td>
+                            <td className="px-4 py-2 text-right font-medium">$512</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2">8+番</td>
+                            <td className="px-4 py-2 text-right font-medium">$1,024 <span className="text-gray-400 text-xs">(capped)</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
