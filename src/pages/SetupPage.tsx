@@ -508,12 +508,18 @@ export default function SetupPage() {
               {menuView === 'about' && (
                 <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
                   <p>
-                    MJ ScoreKeeper tracks scores (番), payout amounts ($), and net money total.
+                    MJ ScoreKeeper is a simple, mobile-first scorekeeping app designed for two-player Hong Kong Mahjong games.
+                  </p>
+                  <p>
+                    It is built for casual and friendly play, where players want a fast and clear way to track scores, faan, and payout amounts, without interrupting the flow of the game. Each winning hand is automatically converted from faan to a payout amount, and the winner of a match is determined by the net money total when the match ends.
                   </p>
 
                   {/* Payout Reference */}
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">Payout Reference (一二蚊)</h3>
+                    <p className="text-gray-600 mb-3">
+                      The payout amount is based on the total number of 番 / faan in a winning hand. Payouts double for each additional faan, with a cap applied.
+                    </p>
                     <div className="bg-gray-50 rounded-lg overflow-hidden">
                       <table className="w-full text-sm">
                         <thead>
