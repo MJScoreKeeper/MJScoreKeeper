@@ -6,12 +6,14 @@ interface ConfirmationSummaryProps {
   winnerName: string;
   criteria: ScoringCriterion[];
   totalPoints: number;
+  payout: number;
 }
 
 export default function ConfirmationSummary({
   winnerName,
   criteria,
   totalPoints,
+  payout,
 }: ConfirmationSummaryProps) {
   const otherPoints = useScoringStore((state) => state.otherPoints);
   const theme = useThemeStore((state) => state.theme);
@@ -46,11 +48,17 @@ export default function ConfirmationSummary({
         )}
       </div>
 
-      {/* Total */}
-      <div className="bg-gray-50 rounded-lg p-6 text-center">
-        <p className="text-sm text-gray-600 mb-1">Total Points</p>
-        <p className="text-5xl font-bold" style={{ color: theme.primary }}>{totalPoints}</p>
-        <p className="text-sm text-gray-600 mt-1">番</p>
+      {/* Total Points and Payout */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gray-50 rounded-lg p-4 text-center">
+          <p className="text-sm text-gray-600 mb-1">Total Points</p>
+          <p className="text-4xl font-bold" style={{ color: theme.primary }}>{totalPoints}</p>
+          <p className="text-sm text-gray-600 mt-1">番</p>
+        </div>
+        <div className="bg-green-50 rounded-lg p-4 text-center">
+          <p className="text-sm text-gray-600 mb-1">Payout</p>
+          <p className="text-4xl font-bold text-green-600">${payout.toLocaleString()}</p>
+        </div>
       </div>
     </div>
   );

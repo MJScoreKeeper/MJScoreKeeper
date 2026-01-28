@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { GameSession, GameResult } from '../types/game.types';
 import { storage } from '../utils/storage.utils';
 import { formatDate, formatTime } from '../utils/date.utils';
+import { calculatePayout } from '../utils/payout.utils';
 import { v4 as uuidv4 } from 'uuid';
 
 interface GameStore {
@@ -33,9 +34,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       player1_name: player1Name,
       player1_total_points: 0,
       player1_win_count: 0,
+      player1_net_amount: 0,
       player2_name: player2Name,
       player2_total_points: 0,
       player2_win_count: 0,
+      player2_net_amount: 0,
       current_game_number: 1,
       created_at: now,
       updated_at: now,
@@ -53,6 +56,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const now = new Date();
     const winnerName = winnerId === 1 ? session.player1_name : session.player2_name;
+    const payout = calculatePayout(points);
 
     // Create game result
     const result: GameResult = {
@@ -61,23 +65,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
       winner_player_number: winnerId,
       winner_name: winnerName,
       points,
+      payout,
       scoring_criteria: scoringCriteria,
       timestamp: now.toISOString(),
       date: formatDate(now),
       time: formatTime(now),
     };
 
-    // Update session
+    // Update session - winner gains payout, loser loses payout
     const updatedSession: GameSession = {
       ...session,
       player1_total_points:
         winnerId === 1 ? session.player1_total_points + points : session.player1_total_points,
       player1_win_count:
         winnerId === 1 ? (session.player1_win_count || 0) + 1 : (session.player1_win_count || 0),
+      player1_net_amount:
+        winnerId === 1
+          ? (session.player1_net_amount || 0) + payout
+          : (session.player1_net_amount || 0) - payout,
       player2_total_points:
         winnerId === 2 ? session.player2_total_points + points : session.player2_total_points,
       player2_win_count:
         winnerId === 2 ? (session.player2_win_count || 0) + 1 : (session.player2_win_count || 0),
+      player2_net_amount:
+        winnerId === 2
+          ? (session.player2_net_amount || 0) + payout
+          : (session.player2_net_amount || 0) - payout,
       current_game_number: session.current_game_number + 1,
       updated_at: now.toISOString(),
     };
@@ -117,9 +130,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       player1_name: session.player1_name,
       player1_total_points: 0,
       player1_win_count: 0,
+      player1_net_amount: 0,
       player2_name: session.player2_name,
       player2_total_points: 0,
       player2_win_count: 0,
+      player2_net_amount: 0,
       current_game_number: 1,
       created_at: now,
       updated_at: now,

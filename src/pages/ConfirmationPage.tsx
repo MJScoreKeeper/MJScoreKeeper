@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useScoringStore } from '../stores/scoringStore';
 import { useThemeStore } from '../stores/themeStore';
+import { calculatePayout } from '../utils/payout.utils';
 import ConfirmationSummary from '../components/scoring/ConfirmationSummary';
 import MahjongBackground from '../components/MahjongBackground';
 
@@ -75,6 +76,7 @@ export default function ConfirmationPage() {
   }
 
   const totalPoints = getTotalPoints();
+  const payout = calculatePayout(totalPoints);
   const winnerName = winnerId === 1 ? session.player1_name : session.player2_name;
 
   const handleConfirm = () => {
@@ -127,6 +129,7 @@ export default function ConfirmationPage() {
           winnerName={winnerName}
           criteria={selectedCriteria}
           totalPoints={totalPoints}
+          payout={payout}
         />
 
         {/* Action Buttons */}

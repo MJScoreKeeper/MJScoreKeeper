@@ -27,8 +27,6 @@ interface MatchCardProps {
 }
 
 function MatchCard({ match, onDelete }: MatchCardProps) {
-  const { theme } = useThemeStore();
-
   const handleDelete = () => {
     if (window.confirm('Delete this match from history?')) {
       onDelete(match.id);
@@ -38,6 +36,8 @@ function MatchCard({ match, onDelete }: MatchCardProps) {
   const isDraw = !match.winner_name;
   const player1Won = match.winner_name === match.player1_name;
   const player2Won = match.winner_name === match.player2_name;
+  const p1NetAmount = match.player1_net_amount || 0;
+  const p2NetAmount = match.player2_net_amount || 0;
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 space-y-3">
@@ -47,18 +47,20 @@ function MatchCard({ match, onDelete }: MatchCardProps) {
         <span>{formatTime(match.ended_at)}</span>
       </div>
 
-      {/* Players and Scores */}
+      {/* Players and Net Amounts */}
       <div className="flex items-center justify-between">
         <div className={`flex-1 text-center p-2 rounded-lg ${player1Won ? 'bg-green-50' : ''}`}>
           <div className={`font-semibold ${player1Won ? 'text-green-700' : 'text-gray-700'}`}>
             {match.player1_name}
             {player1Won && ' 🏆'}
           </div>
-          <div
-            className="text-2xl font-bold"
-            style={{ color: player1Won ? theme.primary : '#6B7280' }}
-          >
-            {match.player1_total_points}
+          {/* Net Amount - Prominent */}
+          <div className={`text-2xl font-bold ${p1NetAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            {p1NetAmount >= 0 ? '+' : ''}${Math.abs(p1NetAmount).toLocaleString()}
+          </div>
+          {/* Total Points - Secondary */}
+          <div className="text-sm text-gray-500 mt-1">
+            {match.player1_total_points} 番
           </div>
         </div>
 
@@ -69,11 +71,13 @@ function MatchCard({ match, onDelete }: MatchCardProps) {
             {match.player2_name}
             {player2Won && ' 🏆'}
           </div>
-          <div
-            className="text-2xl font-bold"
-            style={{ color: player2Won ? theme.primary : '#6B7280' }}
-          >
-            {match.player2_total_points}
+          {/* Net Amount - Prominent */}
+          <div className={`text-2xl font-bold ${p2NetAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            {p2NetAmount >= 0 ? '+' : ''}${Math.abs(p2NetAmount).toLocaleString()}
+          </div>
+          {/* Total Points - Secondary */}
+          <div className="text-sm text-gray-500 mt-1">
+            {match.player2_total_points} 番
           </div>
         </div>
       </div>

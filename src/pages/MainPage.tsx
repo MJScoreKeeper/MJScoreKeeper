@@ -133,9 +133,11 @@ export default function MainPage() {
     return null;
   }
 
-  // Determine who is leading
-  const player1Leading = session.player1_total_points > session.player2_total_points;
-  const player2Leading = session.player2_total_points > session.player1_total_points;
+  // Determine who is leading based on net amount
+  const player1NetAmount = session.player1_net_amount || 0;
+  const player2NetAmount = session.player2_net_amount || 0;
+  const player1Leading = player1NetAmount > player2NetAmount;
+  const player2Leading = player2NetAmount > player1NetAmount;
 
   // Calculate lighter/darker shades of theme color for buttons
   const buttonShades = {
@@ -176,11 +178,13 @@ export default function MainPage() {
       return;
     }
 
-    // Determine winner
+    // Determine winner based on net amount
+    const p1NetAmount = session.player1_net_amount || 0;
+    const p2NetAmount = session.player2_net_amount || 0;
     let winnerName: string | null = null;
-    if (session.player1_total_points > session.player2_total_points) {
+    if (p1NetAmount > p2NetAmount) {
       winnerName = session.player1_name;
-    } else if (session.player2_total_points > session.player1_total_points) {
+    } else if (p2NetAmount > p1NetAmount) {
       winnerName = session.player2_name;
     }
     // If tied, winner_name stays null
@@ -203,6 +207,8 @@ export default function MainPage() {
       player2_name: session.player2_name,
       player1_total_points: session.player1_total_points,
       player2_total_points: session.player2_total_points,
+      player1_net_amount: p1NetAmount,
+      player2_net_amount: p2NetAmount,
       total_games: totalGames,
       draw_count: drawCount,
       winner_name: winnerName,
@@ -294,6 +300,7 @@ export default function MainPage() {
             name={session.player1_name}
             totalPoints={session.player1_total_points}
             winCount={session.player1_win_count || 0}
+            netAmount={player1NetAmount}
             playerNumber={1}
             isLeading={player1Leading}
           />
@@ -301,6 +308,7 @@ export default function MainPage() {
             name={session.player2_name}
             totalPoints={session.player2_total_points}
             winCount={session.player2_win_count || 0}
+            netAmount={player2NetAmount}
             playerNumber={2}
             isLeading={player2Leading}
           />

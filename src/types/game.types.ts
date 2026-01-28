@@ -2,9 +2,11 @@ export interface GameSession {
   player1_name: string;
   player1_total_points: number;
   player1_win_count: number;
+  player1_net_amount: number;
   player2_name: string;
   player2_total_points: number;
   player2_win_count: number;
+  player2_net_amount: number;
   current_game_number: number;
   created_at: string;
   updated_at: string;
@@ -16,6 +18,7 @@ export interface GameResult {
   winner_player_number: 1 | 2;
   winner_name: string;
   points: number;
+  payout: number;
   scoring_criteria: ScoringCriterion[];
   timestamp: string;
   date: string; // YYYY-MM-DD
