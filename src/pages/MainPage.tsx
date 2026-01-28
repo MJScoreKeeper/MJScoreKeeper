@@ -239,11 +239,7 @@ export default function MainPage() {
     }
     // If tied, winner_name stays null
 
-    const confirmMessage = winnerName
-      ? `End match? ${winnerName} wins!\n\nThis will save the match to history and start a new match.`
-      : `End match? It's a tie!\n\nThis will save the match to history and start a new match.`;
-
-    if (!window.confirm(confirmMessage)) {
+    if (!window.confirm('End match?')) {
       return;
     }
 
