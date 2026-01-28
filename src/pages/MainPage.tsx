@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useThemeStore } from '../stores/themeStore';
 import { useHistoryStore } from '../stores/historyStore';
+import { useAuthStore } from '../stores/authStore';
 import PlayerCard from '../components/game/PlayerCard';
 import GameHeader from '../components/game/GameHeader';
 import RecordWinButton from '../components/game/RecordWinButton';
@@ -17,11 +18,11 @@ interface CelebrationData {
 interface CelebrationEffectProps {
   data: CelebrationData;
   onViewHistory: () => void;
-  onSamePlayers: () => void;
-  onDifferentPlayers: () => void;
+  onNewMatch: () => void;
+  onLogout: () => void;
 }
 
-function CelebrationEffect({ data, onViewHistory, onSamePlayers, onDifferentPlayers }: CelebrationEffectProps) {
+function CelebrationEffect({ data, onViewHistory, onNewMatch, onLogout }: CelebrationEffectProps) {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; delay: number; color: string; size: number; rotation: number }>>([]);
   const { theme } = useThemeStore();
 
@@ -86,17 +87,18 @@ function CelebrationEffect({ data, onViewHistory, onSamePlayers, onDifferentPlay
               View History
             </button>
             <button
-              onClick={onSamePlayers}
+              onClick={onNewMatch}
               className="w-full text-white font-semibold py-3 px-4 rounded-lg transition"
               style={{ backgroundColor: `${theme.primary}B3` }}
             >
-              New Match (Same Players)
+              New Match
             </button>
             <button
-              onClick={onDifferentPlayers}
-              className="w-full text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+              onClick={onLogout}
+              className="w-full text-white font-semibold py-3 px-4 rounded-lg transition"
+              style={{ backgroundColor: `${theme.primary}B3` }}
             >
-              New Match (Different Players)
+              Logout
             </button>
           </div>
         </div>
@@ -155,6 +157,7 @@ export default function MainPage() {
   const recordDraw = useGameStore((state) => state.recordDraw);
   const { theme, loadTheme } = useThemeStore();
   const saveMatch = useHistoryStore((state) => state.saveMatch);
+  const signOut = useAuthStore((state) => state.signOut);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -163,10 +166,11 @@ export default function MainPage() {
   }, [loadSession, loadTheme]);
 
   useEffect(() => {
-    if (!session) {
+    // Don't redirect during celebration - we're about to navigate elsewhere
+    if (!session && !showCelebration) {
       navigate('/');
     }
-  }, [session, navigate]);
+  }, [session, showCelebration, navigate]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -288,17 +292,13 @@ export default function MainPage() {
             resetGame();
             navigate('/history');
           }}
-          onSamePlayers={() => {
-            // Keep player names, reset scores
-            const p1 = session.player1_name;
-            const p2 = session.player2_name;
-            resetGame();
-            // Navigate to setup, then immediately create new session with same names
-            navigate('/', { state: { player1: p1, player2: p2, autoStart: true } });
-          }}
-          onDifferentPlayers={() => {
+          onNewMatch={() => {
             resetGame();
             navigate('/');
+          }}
+          onLogout={async () => {
+            resetGame();
+            await signOut();
           }}
         />
       )}
