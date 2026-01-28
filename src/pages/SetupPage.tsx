@@ -8,14 +8,14 @@ import { THEMES } from '../constants/themes';
 import type { ThemeId } from '../constants/themes';
 import MahjongBackground from '../components/MahjongBackground';
 
-type SettingsTab = 'theme' | 'profile';
+type MenuView = 'menu' | 'profile' | 'theme' | 'about';
 
 export default function SetupPage() {
   const [player1Name, setPlayer1Name] = useState('');
   const [player2Name, setPlayer2Name] = useState('');
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<SettingsTab>('theme');
+  const [menuView, setMenuView] = useState<MenuView>('menu');
 
   // Profile editing state
   const [editDisplayName, setEditDisplayName] = useState('');
@@ -85,7 +85,7 @@ export default function SetupPage() {
   };
 
   const openSettings = () => {
-    setSettingsTab('theme');
+    setMenuView('menu');
     setProfileMessage('');
     setProfileError('');
     setNewPassword('');
@@ -250,14 +250,26 @@ export default function SetupPage() {
         </div>
       </div>
 
-      {/* Settings Modal */}
+      {/* Menu Modal */}
       {showSettings && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl max-w-sm w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="sticky top-0 bg-white p-4 border-b">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-900">Settings</h2>
+                {menuView === 'menu' ? (
+                  <h2 className="text-xl font-bold text-gray-900">Menu</h2>
+                ) : (
+                  <button
+                    onClick={() => { setMenuView('menu'); setProfileMessage(''); setProfileError(''); }}
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span className="font-medium">Back</span>
+                  </button>
+                )}
                 <button
                   onClick={() => setShowSettings(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -267,66 +279,96 @@ export default function SetupPage() {
                   </svg>
                 </button>
               </div>
-
-              {/* Tabs */}
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={() => { setSettingsTab('theme'); setProfileMessage(''); setProfileError(''); }}
-                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition ${
-                    settingsTab === 'theme'
-                      ? 'text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                  style={settingsTab === 'theme' ? { backgroundColor: theme.primary } : {}}
-                >
-                  Theme
-                </button>
-                <button
-                  onClick={() => { setSettingsTab('profile'); setProfileMessage(''); setProfileError(''); }}
-                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition ${
-                    settingsTab === 'profile'
-                      ? 'text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                  style={settingsTab === 'profile' ? { backgroundColor: theme.primary } : {}}
-                >
-                  Profile
-                </button>
-              </div>
+              {menuView !== 'menu' && (
+                <h2 className="text-xl font-bold text-gray-900 mt-2">
+                  {menuView === 'profile' && 'Profile'}
+                  {menuView === 'theme' && 'Theme'}
+                  {menuView === 'about' && 'About'}
+                </h2>
+              )}
             </div>
 
             {/* Modal Body */}
             <div className="p-4">
-              {settingsTab === 'theme' && (
-                <div className="space-y-2">
-                  {(Object.keys(THEMES) as ThemeId[]).map((themeId) => (
-                    <button
-                      key={themeId}
-                      onClick={() => handleThemeChange(themeId)}
-                      className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition ${
-                        theme.id === themeId
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div
-                        className="w-8 h-8 rounded-full"
-                        style={{ backgroundColor: THEMES[themeId].primary }}
-                      />
-                      <span className="font-medium text-gray-900">
-                        {THEMES[themeId].name}
-                      </span>
-                      {theme.id === themeId && (
-                        <svg className="ml-auto h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      )}
-                    </button>
-                  ))}
+              {/* Menu List */}
+              {menuView === 'menu' && (
+                <div className="space-y-1">
+                  <button
+                    onClick={() => { setMenuView('profile'); setProfileMessage(''); setProfileError(''); }}
+                    className="w-full flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span className="font-medium text-gray-900">Profile</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+
+                  <button
+                    onClick={() => setMenuView('theme')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                      </svg>
+                      <span className="font-medium text-gray-900">Theme</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+
+                  <button
+                    onClick={handleViewHistory}
+                    className="w-full flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="font-medium text-gray-900">Match History</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+
+                  <button
+                    onClick={() => setMenuView('about')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="font-medium text-gray-900">About</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      <span className="font-medium text-red-600">Sign Out</span>
+                    </div>
+                  </button>
                 </div>
               )}
 
-              {settingsTab === 'profile' && (
+              {/* Profile Panel */}
+              {menuView === 'profile' && (
                 <div className="space-y-6">
                   {/* Status Messages */}
                   {profileMessage && (
@@ -420,28 +462,54 @@ export default function SetupPage() {
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-white p-4 border-t space-y-2">
-              <button
-                onClick={handleViewHistory}
-                className="w-full flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Match History
-              </button>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-3 px-4 rounded-lg transition"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Sign Out
-              </button>
+              {/* Theme Panel */}
+              {menuView === 'theme' && (
+                <div className="space-y-2">
+                  {(Object.keys(THEMES) as ThemeId[]).map((themeId) => (
+                    <button
+                      key={themeId}
+                      onClick={() => handleThemeChange(themeId)}
+                      className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition ${
+                        theme.id === themeId
+                          ? 'border-gray-900 bg-gray-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-full"
+                        style={{ backgroundColor: THEMES[themeId].primary }}
+                      />
+                      <span className="font-medium text-gray-900">
+                        {THEMES[themeId].name}
+                      </span>
+                      {theme.id === themeId && (
+                        <svg className="ml-auto h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* About Panel */}
+              {menuView === 'about' && (
+                <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
+                  <p>
+                    MJ ScoreKeeper is a simple, mobile-first scorekeeping app designed for two-player Hong Kong Mahjong games.
+                  </p>
+                  <p>
+                    It is built for casual and friendly play, where players want a fast and clear way to track scores, wins, and hands without interrupting the flow of the game.
+                  </p>
+                  <p>
+                    The app runs entirely on the device, requires no account to use, and works offline once loaded.
+                  </p>
+                  <p>
+                    MJ ScoreKeeper focuses on clarity, ease of use, and sharing a single active match between players.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
