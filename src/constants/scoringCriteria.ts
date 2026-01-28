@@ -4,6 +4,7 @@ export const SCORING_CATEGORIES: ScoringCategory[] = [
   {
     name: 'Win Actions 食糊加番',
     criteria: [
+      { id: 'discarded-tile', name: '打出 (Discarded Tile)', points: 0, category: 'win-actions' },
       { id: 'self-drawn', name: '自摸 (Self-Drawn)', points: 1, category: 'win-actions' },
       { id: 'robbing-kong', name: '搶槓 (Robbing the Kong)', points: 1, category: 'win-actions' },
       { id: 'last-tile', name: '海底撈月 (Last Tile Draw)', points: 1, category: 'win-actions' },

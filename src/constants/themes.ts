@@ -32,4 +32,4 @@ export const THEMES: Record<ThemeId, Theme> = {
   },
 };
 
-export const DEFAULT_THEME: ThemeId = 'green';
+export const DEFAULT_THEME: ThemeId = 'ocean';

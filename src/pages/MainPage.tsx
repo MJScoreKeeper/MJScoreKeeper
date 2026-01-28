@@ -139,8 +139,8 @@ export default function MainPage() {
 
   // Calculate lighter/darker shades of theme color for buttons
   const buttonShades = {
-    recordDraw: `${theme.primary}99`, // 60% opacity version
-    endMatch: `${theme.primary}CC`, // 80% opacity version
+    recordDraw: `${theme.primary}B3`, // 70% opacity version
+    endMatch: `${theme.primary}B3`, // 70% opacity version (same as recordDraw)
   };
 
   const handleRecordWin = () => {

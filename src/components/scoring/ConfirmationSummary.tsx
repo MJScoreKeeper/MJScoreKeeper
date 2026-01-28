@@ -47,10 +47,10 @@ export default function ConfirmationSummary({
       </div>
 
       {/* Total */}
-      <div className="bg-gray-700 text-white rounded-lg p-6 text-center">
-        <p className="text-sm opacity-90 mb-1">Total Points</p>
-        <p className="text-5xl font-bold">{totalPoints}</p>
-        <p className="text-sm opacity-90 mt-1">番</p>
+      <div className="bg-gray-50 rounded-lg p-6 text-center">
+        <p className="text-sm text-gray-600 mb-1">Total Points</p>
+        <p className="text-5xl font-bold" style={{ color: theme.primary }}>{totalPoints}</p>
+        <p className="text-sm text-gray-600 mt-1">番</p>
       </div>
     </div>
   );
