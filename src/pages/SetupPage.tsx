@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../stores/gameStore';
 import { useThemeStore } from '../stores/themeStore';
 import { useAuthStore } from '../stores/authStore';
@@ -30,6 +30,17 @@ export default function SetupPage() {
   const { theme, setTheme, loadTheme } = useThemeStore();
   const { user, signOut, updateProfile, updateEmail, updatePassword } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for autoStart from navigation state (same players new match)
+  useEffect(() => {
+    const state = location.state as { player1?: string; player2?: string; autoStart?: boolean } | null;
+    if (state?.autoStart && state.player1 && state.player2) {
+      // Auto-start new match with same players
+      createSession(state.player1, state.player2);
+      navigate('/main', { replace: true });
+    }
+  }, [location.state, createSession, navigate]);
 
   useEffect(() => {
     loadTheme();

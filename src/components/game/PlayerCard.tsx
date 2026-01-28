@@ -31,7 +31,7 @@ export default function PlayerCard({ name, totalPoints, winCount, netAmount, pla
       {/* Net Amount - Prominent display */}
       <div className={`text-center py-2 px-3 rounded-lg mb-3 ${netAmount >= 0 ? 'bg-green-50' : 'bg-red-50'}`}>
         <span className={`text-3xl font-bold ${netAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-          {netAmount >= 0 ? '+' : ''}${Math.abs(netAmount).toLocaleString()}
+          {netAmount < 0 ? '-' : ''}${Math.abs(netAmount).toLocaleString()}
         </span>
       </div>
       {/* Stats row */}

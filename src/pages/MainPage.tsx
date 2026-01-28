@@ -8,8 +8,22 @@ import GameHeader from '../components/game/GameHeader';
 import RecordWinButton from '../components/game/RecordWinButton';
 import MahjongBackground from '../components/MahjongBackground';
 
-function CelebrationEffect({ winnerName }: { winnerName: string | null }) {
+interface CelebrationData {
+  winnerName: string | null;
+  winnerNetAmount: number;
+  wonByAmount: number;
+}
+
+interface CelebrationEffectProps {
+  data: CelebrationData;
+  onViewHistory: () => void;
+  onSamePlayers: () => void;
+  onDifferentPlayers: () => void;
+}
+
+function CelebrationEffect({ data, onViewHistory, onSamePlayers, onDifferentPlayers }: CelebrationEffectProps) {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; delay: number; color: string; size: number; rotation: number }>>([]);
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#FF69B4', '#00CED1'];
@@ -25,12 +39,14 @@ function CelebrationEffect({ winnerName }: { winnerName: string | null }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-hidden">
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/50" />
       {/* Confetti particles */}
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className="absolute rounded-full animate-confetti-fall"
+          className="absolute rounded-full animate-confetti-fall pointer-events-none"
           style={{
             left: `${particle.x}%`,
             top: '-20px',
@@ -42,13 +58,47 @@ function CelebrationEffect({ winnerName }: { winnerName: string | null }) {
         />
       ))}
       {/* Winner announcement */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mx-4 animate-bounce-in text-center">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 animate-bounce-in text-center max-w-sm w-full">
           <div className="text-6xl mb-4">🏆</div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {winnerName ? `${winnerName} Wins!` : "It's a Tie!"}
+            {data.winnerName ? `${data.winnerName} Wins!` : "It's a Tie!"}
           </h2>
-          <p className="text-gray-600">Match saved to history</p>
+          {data.winnerName && (
+            <div className="mb-4 space-y-1">
+              <p className="text-3xl font-bold text-green-600">
+                ${data.winnerNetAmount.toLocaleString()}
+              </p>
+              <p className="text-sm text-gray-500">
+                Won by ${data.wonByAmount.toLocaleString()}
+              </p>
+            </div>
+          )}
+          <p className="text-gray-600 mb-6">Match saved to history</p>
+
+          {/* Action buttons */}
+          <div className="space-y-3">
+            <button
+              onClick={onViewHistory}
+              className="w-full text-white font-semibold py-3 px-4 rounded-lg transition"
+              style={{ backgroundColor: theme.primary }}
+            >
+              View History
+            </button>
+            <button
+              onClick={onSamePlayers}
+              className="w-full text-white font-semibold py-3 px-4 rounded-lg transition"
+              style={{ backgroundColor: `${theme.primary}B3` }}
+            >
+              New Match (Same Players)
+            </button>
+            <button
+              onClick={onDifferentPlayers}
+              className="w-full text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+            >
+              New Match (Different Players)
+            </button>
+          </div>
         </div>
       </div>
       <style>{`
@@ -95,7 +145,7 @@ function CelebrationEffect({ winnerName }: { winnerName: string | null }) {
 export default function MainPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
-  const [celebrationWinner, setCelebrationWinner] = useState<string | null>(null);
+  const [celebrationData, setCelebrationData] = useState<CelebrationData | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const session = useGameStore((state) => state.session);
@@ -216,15 +266,17 @@ export default function MainPage() {
     setIsSaving(false);
 
     if (result.success) {
-      // Show celebration
-      setCelebrationWinner(winnerName);
-      setShowCelebration(true);
+      // Calculate winner's net amount and won by amount
+      const winnerNetAmount = winnerName === session.player1_name ? p1NetAmount : p2NetAmount;
+      const wonByAmount = Math.abs(p1NetAmount - p2NetAmount);
 
-      // Navigate after celebration
-      setTimeout(() => {
-        resetGame();
-        navigate('/');
-      }, 2500);
+      // Show celebration with data
+      setCelebrationData({
+        winnerName,
+        winnerNetAmount,
+        wonByAmount,
+      });
+      setShowCelebration(true);
     } else {
       window.alert(`Failed to save match: ${result.error}`);
     }
@@ -233,7 +285,27 @@ export default function MainPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative">
       {/* Celebration Effect */}
-      {showCelebration && <CelebrationEffect winnerName={celebrationWinner} />}
+      {showCelebration && celebrationData && (
+        <CelebrationEffect
+          data={celebrationData}
+          onViewHistory={() => {
+            resetGame();
+            navigate('/history');
+          }}
+          onSamePlayers={() => {
+            // Keep player names, reset scores
+            const p1 = session.player1_name;
+            const p2 = session.player2_name;
+            resetGame();
+            // Navigate to setup, then immediately create new session with same names
+            navigate('/', { state: { player1: p1, player2: p2, autoStart: true } });
+          }}
+          onDifferentPlayers={() => {
+            resetGame();
+            navigate('/');
+          }}
+        />
+      )}
 
       {/* Mahjong Background */}
       <MahjongBackground opacity={0.08} color="#9CA3AF" />
