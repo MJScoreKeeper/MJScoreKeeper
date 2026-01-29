@@ -268,7 +268,7 @@ export default function MainPage() {
     if (result.success) {
       // Calculate winner's net amount and won by amount
       const winnerNetAmount = winnerName === session.player1_name ? p1NetAmount : p2NetAmount;
-      const wonByAmount = Math.abs(p1NetAmount - p2NetAmount);
+      const wonByAmount = Math.abs(winnerNetAmount);
 
       // Show celebration with data
       setCelebrationData({
